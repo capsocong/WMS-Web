@@ -19,6 +19,7 @@ function Recent() {
   return (
     <Box>
       <Button
+        sx={{ color: 'white' }}
         id="basic-button-recent"
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}

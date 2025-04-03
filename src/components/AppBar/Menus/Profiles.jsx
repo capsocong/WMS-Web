@@ -22,7 +22,7 @@ function Profiles() {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar sx={{ width: 28, height: 28, mr: 2 }}
+          <Avatar sx={{ width: 34, height: 34, mr: 2 }}
             src='https://avatars.githubusercontent.com/u/91900796?s=400&u=b11c97b0680d7d80abcc89e8999e7330bddfd3e2&v=4'
             alt='Profile'/>
         </IconButton>

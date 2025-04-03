@@ -5,17 +5,17 @@ import VpnLockIcon from '@mui/icons-material/VpnLock'
 import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
 
 const boardBar_style = {
-  color: 'primary.main',
-  backgroundColor: 'white',
+  color: 'white',
+  backgroundColor: 'transparent',
   border: 'none',
   paddingX: '5px',
   borderRadius: '4px',
-  '& .MuiSvgIcon-root':{
-    color: 'primary.main'
+  '.MuiSvgIcon-root':{
+    color: 'white'
   },
   '&:hover': {
     bgcolor: 'primary.50'
@@ -26,7 +26,7 @@ function BoardBar() {
 
   return (
     <Box sx={{
-      backgroundColor: 'white',
+      backgroundColor: 'primary.mawin',
       width: '100%',
       height: () => theme.Wms.boardBarHeight,
       display: 'flex',
@@ -34,7 +34,8 @@ function BoardBar() {
       justifyContent: 'space-between',
       gap: 2,
       overflowX: 'auto',
-      borderTop: '1px solid #00bfa5',
+      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
+      borderBottom: '1px solid white',
       paddingX: 2
 
     }}>
@@ -71,11 +72,26 @@ function BoardBar() {
         />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Button variant="outlined" startIcon={<PersonAddIcon />} sx={{
-          color: 'primary.main' }}>
+        <Button variant="outlined" startIcon={<PersonAddIcon />}
+          sx={{
+            color: 'white',
+            borderColor: 'white',
+            '&:hover': { borderColor: 'white' }
+          }}
+        >
           invite
         </Button>
-        <AvatarGroup max={4} sx={{ '& .MuiAvatarGroup-avatar': { width: 30, height: 30 } }}>
+        <AvatarGroup
+          max={4}
+          sx={{
+            gap: '10px',
+            '& .MuiAvatarGroup-avatar': {
+              width: 30,
+              height: 30,
+              border: 'none'
+            }
+          }}
+        >
           <Tooltip title='tien.tdev'>
             <Avatar
               alt='Tran Tien'
