@@ -28,6 +28,13 @@ const theme = extendTheme({
   },
   // ...other properties
   components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+        }
+      }
+    },
     MuiCssBaseline: {
       styleOverrides: {
         body: {
