@@ -18,7 +18,7 @@ function SelectMode() {
   }
 
   return (
-    <FormControl size="small">
+    <FormControl size="small" sx={{ minWidth: '120px' }}>
       <InputLabel id="label-select-small-label" >Mode</InputLabel>
       <Select
         labelId="label-select-dark-light-mode"

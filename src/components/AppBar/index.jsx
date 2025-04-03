@@ -23,20 +23,24 @@ function AppBar() {
       gap: 2,
       overflowX: 'auto'
     }}>
-      <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         <AppsIcon sx={{ color: 'primary.main' }}/>
         <Typography variant='span' sx={{ fontSize: '1,2rem', fontWeight: 'bold', color: 'primary.main', alignItems: 'center' }} >
            ManagementTask
         </Typography>
-        <Workspace />
-        <Recent />
-        <Starred />
-        <Templates />
-        <Button variant="outlined" >Create</Button>
+
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
+          <Workspace />
+          <Recent />
+          <Starred />
+          <Templates />
+          <Button variant="outlined" >Create</Button>
+        </Box>
+
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <TextField id="outlined-search" label="Search..." size='small'/>
+        <TextField id="outlined-search" label="Search..." size='small' sx={{ minWidth: '120px' }}/>
         <SelectMode />
         <Tooltip title="Notifications">
           <Badge color="secondary" variant="dot" >
