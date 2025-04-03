@@ -61,7 +61,6 @@ function Workspace() {
           </ListItemIcon>
           <ListItemText>Paste</ListItemText>
           <Typography variant="body2" color="text.secondary">
-            ⌘V
           </Typography>
         </MenuItem>
       </Menu>

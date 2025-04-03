@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material'
+import { Avatar, Box, Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material'
 import React from 'react'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import { Logout, PersonAdd, Settings } from '@mui/icons-material'

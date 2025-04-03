@@ -8,7 +8,7 @@ import Starred from './Menus/Starred'
 import Templates from './Menus/templates'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import Tooltip from '@mui/material/Tooltip'
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profiles from './Menus/Profiles'
 
 
@@ -19,19 +19,24 @@ function AppBar() {
       width: '100%',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      gap: 2,
+      overflowX: 'auto'
     }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }}>
         <AppsIcon sx={{ color: 'primary.main' }}/>
-        <Typography variant='span' sx={{ fontSize: '1,2rem', fontWeight: 'bold', color: 'primary.main' }} >ManagementTask </Typography>
+        <Typography variant='span' sx={{ fontSize: '1,2rem', fontWeight: 'bold', color: 'primary.main', alignItems: 'center' }} >
+           ManagementTask
+        </Typography>
         <Workspace />
         <Recent />
         <Starred />
         <Templates />
-        <Button variant="outlined">Create</Button>
+        <Button variant="outlined" >Create</Button>
       </Box>
-      <Box sx={{display: 'flex', alignItems: 'center', gap: 1 }}>
-        <TextField id="oulined-search" label="Search..." size='small'/>
+
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <TextField id="outlined-search" label="Search..." size='small'/>
         <SelectMode />
         <Tooltip title="Notifications">
           <Badge color="secondary" variant="dot" >
