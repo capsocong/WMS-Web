@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Badge, Box, Button, InputAdornment, TextField, Typography } from '@mui/material'
-import SelectMode from '~/components/ModeSelect'
+import SelectMode from '~/components/ModeSelect/ModeSelect'
 import theme from '~/theme'
 import AppsIcon from '@mui/icons-material/Apps'
 import Workspace from './Menus/Workspaces'
