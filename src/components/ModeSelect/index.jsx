@@ -1,6 +1,6 @@
 import {
-  Experimental_CssVarsProvider as CssVarsProvider,
-  experimental_extendTheme as extendTheme,
+  // Experimental_CssVarsProvider as CssVarsProvider,
+  // experimental_extendTheme as extendTheme,
   useColorScheme
 } from '@mui/material/styles'
 import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material'

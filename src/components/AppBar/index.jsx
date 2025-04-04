@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import { Badge, Box, Button, InputAdornment, TextField, Typography } from '@mui/material'
 import SelectMode from '~/components/ModeSelect'
 import theme from '~/theme'
@@ -27,6 +27,7 @@ function AppBar() {
       justifyContent: 'space-between',
       gap: 2,
       overflowX: 'auto',
+      '&::-webkit-scrollbar-track': { m: 2 },
       bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0')
     }}>
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
