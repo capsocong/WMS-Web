@@ -21,7 +21,8 @@ function Card({ card }) {
     // touchAction: 'none', // Dành cho sensor dạng pointerSensor
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : undefined,
+    border: isDragging ? '1px  solid #2ecc71' : undefined
   }
   const shouldShowCard = () => {
     return !card?.memberIds?.length && !!card?.comments?.length && !!card?.attachments?.length
