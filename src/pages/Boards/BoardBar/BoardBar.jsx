@@ -6,7 +6,7 @@ import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
-
+import { capitalizeFirstLetter } from '~/utils/formatters'
 
 const boardBar_style = {
   color: 'white',
@@ -22,8 +22,7 @@ const boardBar_style = {
   }
 }
 
-function BoardBar() {
-
+function BoardBar({ board }) {
   return (
     <Box sx={{
       backgroundColor: 'primary.mawin',
@@ -44,13 +43,13 @@ function BoardBar() {
         <Chip
           sx = {boardBar_style}
           icon={<DashBoardIcon />}
-          label="Board"
+          label={board?.title}
           clickable
         />
         <Chip
           sx = {boardBar_style}
           icon={<VpnLockIcon />}
-          label="Private"
+          label={capitalizeFirstLetter(board?.type)}
           clickable
         />
         <Chip
