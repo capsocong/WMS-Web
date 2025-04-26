@@ -15,7 +15,8 @@ import { DndContext,
 import { arrayMove } from '@dnd-kit/sortable'
 import { mapOrder } from '~/utils/sort'
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
+import { generatePlaceholderCard } from '~/utils/formatters'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 
@@ -80,9 +81,16 @@ function BoardContent({ board }) {
       if (nextActiveColumn ) {
         // xóa card trong column cũ
         nextActiveColumn.cards = nextActiveColumn.cards.filter( card => card._id !== activeDraggingCardId )
+
+        //thêm placehodelcard nếu column bị rỗng(k chứa 1 card nào)
+        if (isEmpty(nextActiveColumn.cards)) {
+          console.log('card cuối cùng bị kéo đi')
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
+        }
         // cập nhật lai cardOrderIds trong column cũ
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map( card => card._id )
       }
+
       if (nextOverColumn) {
         // kiểm tra xem cardId đã tồn tại trong overColumn chưa, nếu có thì xóa nó trước
         nextOverColumn.cards = nextOverColumn.cards.filter( card => card._id !== activeDraggingCardId )
@@ -92,9 +100,14 @@ function BoardContent({ board }) {
         }
         // thêm cardId vào overColumn
         nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, rebuild_ActiveDraggingCarData)
+
+        // xóa placeholderCard nếu column không còn rỗng
+        nextOverColumn.cards = nextOverColumn.cards.filter( card => !card?.FE_PlaceholderCard)
+
         // cập nhật lai cardOrderIds trong column cũ
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map( card => card._id )
       }
+      console.log('nextColumns', nextColumns)
       return nextColumns
     })
 
@@ -251,7 +264,7 @@ function BoardContent({ board }) {
     let overId = getFirstCollision(pointerIntersections, 'id')
 
     if (overId) {
-      console.log('overId before', overId)
+      // console.log('overId before', overId)
       const checkColumn = orderedColumns.find(column => column._id === overId)
       if (checkColumn) {
         overId = closestCorners({
@@ -260,7 +273,7 @@ function BoardContent({ board }) {
             return (container.id !== overId) && (checkColumn?.cardOrderIds?.includes(container.id))
           })
         })[0]?.id
-        console.log('overId after', overId)
+        // console.log('overId after', overId)
       }
       lastOverId.current = overId
       return [{ id: overId }]
