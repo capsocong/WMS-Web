@@ -33,7 +33,9 @@ function Card({ card }) {
       sx={{
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
-        overflow: 'unset'
+        overflow: 'unset',
+        opacity: card?.FE_PlaceholderCard ? '0' : '1',
+        height: card?.FE_PlaceholderCard ? '0px' : 'auto'
       }}>
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} />}
       <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
