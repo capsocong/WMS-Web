@@ -40,36 +40,47 @@ function BoardBar({ board }) {
 
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Chip
-          sx = {boardBar_style}
-          icon={<DashBoardIcon />}
-          label={board?.title}
-          clickable
-        />
-        <Chip
-          sx = {boardBar_style}
-          icon={<VpnLockIcon />}
-          label={capitalizeFirstLetter(board?.type)}
-          clickable
-        />
-        <Chip
-          sx = {boardBar_style}
-          icon={<AddToDriveIcon />}
-          label="Add to drive"
-          clickable
-        />
-        <Chip
-          sx = {boardBar_style}
-          icon={<BoltIcon />}
-          label="Automation"
-          clickable
-        />
-        <Chip
-          sx = {boardBar_style}
-          icon={<FilterListIcon />}
-          label="Filter"
-          clickable
-        />
+        <Tooltip title={board?.description}>
+          <Chip
+            sx = {boardBar_style}
+            icon={<DashBoardIcon />}
+            label={board?.title}
+            clickable
+          />
+        </Tooltip>
+
+        <Tooltip title={board?.type}>
+          <Chip
+            sx = {boardBar_style}
+            icon={<VpnLockIcon />}
+            label={capitalizeFirstLetter(board?.type)}
+            clickable
+          />
+        </Tooltip>
+        <Tooltip title='AddToDriveIcon'>
+          <Chip
+            sx = {boardBar_style}
+            icon={<AddToDriveIcon />}
+            label="Add to drive"
+            clickable
+          />
+        </Tooltip>
+        <Tooltip title='Automation'>
+          <Chip
+            sx = {boardBar_style}
+            icon={<BoltIcon />}
+            label="Automation"
+            clickable
+          />
+        </Tooltip>
+        <Tooltip title='FilterListIcon'>
+          <Chip
+            sx = {boardBar_style}
+            icon={<FilterListIcon />}
+            label="Filter"
+            clickable
+          />
+        </Tooltip>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Button variant="outlined" startIcon={<PersonAddIcon />}
