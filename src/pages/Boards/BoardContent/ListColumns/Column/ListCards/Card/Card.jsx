@@ -35,7 +35,9 @@ function Card({ card }) {
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
         overflow: 'unset',
         opacity: card?.FE_PlaceholderCard ? '0' : '1',
-        height: card?.FE_PlaceholderCard ? '0px' : 'auto'
+        height: card?.FE_PlaceholderCard ? '0px' : 'auto',
+        border: '1px solid transparent',
+        '&:hover': { borderColor: (theme) => theme.palette.primary.main }
       }}>
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} />}
       <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
