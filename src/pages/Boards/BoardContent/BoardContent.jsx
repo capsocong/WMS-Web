@@ -4,14 +4,13 @@ import ListColumns from './ListColumns/ListColumns'
 import { DndContext,
   useSensor,
   useSensors,
-  MouseSensor,
-  TouchSensor,
   DragOverlay,
   defaultDropAnimationSideEffects
   , closestCorners,
   pointerWithin,
   getFirstCollision
 } from '@dnd-kit/core'
+import { MouseSensor, TouchSensor } from '~/customLib/dndkitSensors'
 import { arrayMove } from '@dnd-kit/sortable'
 import { mapOrder } from '~/utils/sort'
 import { useEffect, useState, useCallback, useRef } from 'react'
@@ -25,7 +24,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
   // yêu cầu chuột di chuyển 10px trước khi truyền vào event
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
   // yêu cầu chuột di chuyển 10px trước khi truyền vào event
@@ -84,7 +83,6 @@ function BoardContent({ board }) {
 
         //thêm placehodelcard nếu column bị rỗng(k chứa 1 card nào)
         if (isEmpty(nextActiveColumn.cards)) {
-          console.log('card cuối cùng bị kéo đi')
           nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
         }
         // cập nhật lai cardOrderIds trong column cũ
@@ -107,7 +105,6 @@ function BoardContent({ board }) {
         // cập nhật lai cardOrderIds trong column cũ
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map( card => card._id )
       }
-      console.log('nextColumns', nextColumns)
       return nextColumns
     })
 
@@ -219,8 +216,11 @@ function BoardContent({ board }) {
         //dung arrayMove de sap xep lai mang orderedColumns
         // const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
         //xu ly du lieu tren api
+        moveColumns(dndOrderedColumns)
         // console.log('dndOrderedColumns', dndOrderedColumns)
         // console.log('dndOrderedColumnsIds', dndOrderedColumnsIds)
+
+        // Vẫn gọi update lại state orderedColumns để giao diện cập nhật lại tránh delay
         setOrderedColumns(dndOrderedColumns)
       }
     }
@@ -299,7 +299,11 @@ function BoardContent({ board }) {
         overflowY: 'hidden',
         p: '10px 0'
       }}>
-        <ListColumns columns={orderedColumns} />
+        <ListColumns
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+        />
         <DragOverlay dropAnimation={dropAnimation} customDropAnimationSideEffects={customDropAnimationSideEffects}>
           {!activeDragItemType && null}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData}/>}

@@ -16,16 +16,15 @@ import { mapOrder } from '~/utils/sort'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import CloseIcon from '@mui/icons-material/Close'
+import { toast } from 'react-toastify'
 
 
-
-function Column({ column }) {
+function Column({ column, createNewCard }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
     data: { ...column }
   })
   const dndKitColumnStyle = {
-    // touchAction: 'none', // Dành cho sensor dạng pointerSensor
     transform: CSS.Translate.toString(transform),
     transition,
     // chiều cao của column phải là 100% vì khi kéo thả sẽ bị ảnh hưởng bởi chiều cao của column
@@ -43,11 +42,19 @@ function Column({ column }) {
   const toggleNewCardForm = () => setNewOpenCardForm(!openNewCardForm)
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
+      toast.error('Vui lòng nhập tiêu đề cho thẻ mới', { position: 'bottom-right' })
       return
     }
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+    // gọi lên props function createNewCard nằm ở component cha cao nhất
+    await createNewCard(newCardData)
 
+    // đóng trạng thái thêm card mới & clear input
     toggleNewCardForm()
     setNewCardTitle('')
   }
@@ -159,6 +166,7 @@ function Column({ column }) {
                 size='small'
                 variant='outlined'
                 autoFocus
+                data-no-dnd='true'
                 value={newCardTitle}
                 onChange={(e) => setNewCardTitle(e.target.value)}
                 sx={{

@@ -5,23 +5,33 @@ import Column from './Column/Column'
 import NoteAddIcon from '@mui/icons-material/NoteAdd'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 import { TextField } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
-function ListColumns({ columns }) {
+function ListColumns({ columns, createNewColumn, createNewCard }) {
   const [openNewColumnForm, setNewOpenColumnForm] = useState(false)
   const toggleNewColumnForm = () => setNewOpenColumnForm(!openNewColumnForm)
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
+      toast.error('Vui lòng nhập tiêu đề cho cột mới')
       return
     }
+    //Tạo dữ liệu column để gọi api
+    const newColumnData = {
+      title: newColumnTitle
+    }
+
+    await createNewColumn(newColumnData)
+
+    // đóng trạng thái thêm mới & clear input
     toggleNewColumnForm()
     setNewColumnTitle('')
   }
   return (
-    <SortableContext items={columns?.map(c => c._id)} strategy={horizontalListSortingStrategy}>
+    <SortableContext items={columns?.map((c, index) => c._id || `fallback-${index}`)} strategy={horizontalListSortingStrategy}>
       <Box sx={{
         bgcolor: 'inherit',
         width: '100%',
@@ -32,7 +42,18 @@ function ListColumns({ columns }) {
         '&::-webkit-scrollbar-track': { m: 2 }
       }}>
         {/* box column 01 */}
-        {columns?.map( column => ( <Column key={column._id} column = {column}/>))}
+
+        {columns?.map(column => <Column key={column._id} column = {column} createNewCard = {createNewCard}/>)}
+        {/* {columns?.map((column, index) => {
+          console.log('column._id:', column._id) // 👈 Ghi log mỗi column khi render
+          return (
+            <Column
+              key={column._id}
+              column={column}
+              createNewCard={createNewCard}
+            />
+          )
+        })} */}
         {/* box add new column */}
         {!openNewColumnForm
           ? <Box onClick={toggleNewColumnForm} sx={{
