@@ -12,7 +12,6 @@ import { Cloud, ContentPaste } from '@mui/icons-material'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import { Box, Button, Divider, Menu, MenuItem, TextField } from '@mui/material'
 import ListCards from './ListCards/ListCards'
-import { mapOrder } from '~/utils/sort'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import CloseIcon from '@mui/icons-material/Close'
@@ -37,7 +36,7 @@ function Column({ column, createNewCard }) {
   const handleClick = (event) => { setAnchorEl(event.currentTarget)}
   const handleClose = () => { setAnchorEl(null) }
 
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const orderedCards = column.cards
   const [openNewCardForm, setNewOpenCardForm] = useState(false)
   const toggleNewCardForm = () => setNewOpenCardForm(!openNewCardForm)
   const [newCardTitle, setNewCardTitle] = useState('')
