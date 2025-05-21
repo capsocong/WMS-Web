@@ -31,7 +31,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
     setNewColumnTitle('')
   }
   return (
-    <SortableContext items={columns?.map((c, index) => c._id || `fallback-${index}`)} strategy={horizontalListSortingStrategy}>
+    <SortableContext items={columns?.map((c) => c._id)} strategy={horizontalListSortingStrategy}>
       <Box sx={{
         bgcolor: 'inherit',
         width: '100%',
@@ -42,18 +42,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
         '&::-webkit-scrollbar-track': { m: 2 }
       }}>
         {/* box column 01 */}
-
         {columns?.map(column => <Column key={column._id} column = {column} createNewCard = {createNewCard}/>)}
-        {/* {columns?.map((column, index) => {
-          console.log('column._id:', column._id) // 👈 Ghi log mỗi column khi render
-          return (
-            <Column
-              key={column._id}
-              column={column}
-              createNewCard={createNewCard}
-            />
-          )
-        })} */}
         {/* box add new column */}
         {!openNewColumnForm
           ? <Box onClick={toggleNewColumnForm} sx={{

@@ -19,7 +19,7 @@ export const mockData = {
             boardId: 'board-id-01',
             columnId: 'column-id-01',
             title: 'Title of card 01',
-            description: 'Markdown Syntax (sẽ ở khóa nâng cao nhé)',
+            description: 'Markdown Syntax',
             cover: 'https://scontent.fhan5-2.fna.fbcdn.net/v/t1.6435-9/201842145_2952857961623803_3667315995960809518_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=EmoHPde7n0wQ7kNvwGda1Xv&_nc_oc=Adlv4zmHNSZtNj1o0IXwG1hRhYk0Dg4Th7VeeM_r3Spxvrscfhpxm8x2eMS4rT8sl6c&_nc_zt=23&_nc_ht=scontent.fhan5-2.fna&_nc_gid=WCdGqpFzdD4tFK453eo9BA&oh=00_AfHSZeOviWDi2g9dNsUTmY7JiZooArMS1q8oOUw2srWxXA&oe=681C527A',
             memberIds: ['test-user-id-01'],
             comments: ['test comment 01', 'test comment 02'],

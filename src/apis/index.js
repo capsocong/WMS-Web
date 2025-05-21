@@ -7,7 +7,10 @@ export const fetchBoardDetailsAPI = async (boardId) => {
   return response.data
   // axios sẽ trả về kết qua qua proberty của nó là data
 }
-
+export const moveCardToDiffirentColumnAPI = async (updateData) => {
+  const response = await axios.put(`${API_ROOT}/v1/boards/supports/moving_card`, updateData)
+  return response.data
+}
 //column
 export const createNewColumnAPI = async (newColumnData) => {
   const response = await axios.post(`${API_ROOT}/v1/columns`, newColumnData)
@@ -16,7 +19,6 @@ export const createNewColumnAPI = async (newColumnData) => {
 export const updateColumnDetailsAPI = async (columnId, updateData) => {
   const response = await axios.put(`${API_ROOT}/v1/columns/${columnId}`, updateData)
   return response.data
-  // axios sẽ trả về kết qua qua proberty của nó là data
 }
 //card
 export const createNewCardAPI = async (newColumnCard) => {
@@ -27,7 +29,6 @@ export const createNewCardAPI = async (newColumnCard) => {
 export const updateBoardDetailsAPI = async (boardId, updateData) => {
   const response = await axios.put(`${API_ROOT}/v1/boards/${boardId}`, updateData)
   return response.data
-  // axios sẽ trả về kết qua qua proberty của nó là data
 }
 
 
