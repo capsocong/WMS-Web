@@ -7,13 +7,10 @@ import RegisterForm from './RegisterForm'
 
 function Auth() {
   const location = useLocation()
-  // console.log(location)
+
   const isLogin = location.pathname === '/login'
   const isRegister = location.pathname === '/register'
-  // const currentUser = useSelector(selectCurrentUser)
-  // if (currentUser) {
-  //   return <Navigate to="/" replace />
-  // }
+
   return (
     <Box sx={{
       display: 'flex',
@@ -21,7 +18,7 @@ function Auth() {
       minHeight: '100vh',
       alignItems: 'center',
       justifyContent: 'flex-start',
-      background: 'url("src/assets/auth/login-register-bg.jpg")',
+      background: 'url("src/assets/auth/desk-2325627_640.jpg")',
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
       backgroundPosition: 'center',

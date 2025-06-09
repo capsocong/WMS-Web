@@ -1,17 +1,17 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import Typography from '@mui/material/Typography'
+// import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import Divider from '@mui/material/Divider'
+// import Divider from '@mui/material/Divider'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import ContentCut from '@mui/icons-material/ContentCut'
-import ContentCopy from '@mui/icons-material/ContentCopy'
-import ContentPaste from '@mui/icons-material/ContentPaste'
-import Cloud from '@mui/icons-material/Cloud'
+// import ContentCut from '@mui/icons-material/ContentCut'
+// import ContentCopy from '@mui/icons-material/ContentCopy'
+// import ContentPaste from '@mui/icons-material/ContentPaste'
+// import Cloud from '@mui/icons-material/Cloud'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Tooltip from '@mui/material/Tooltip'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
@@ -23,10 +23,12 @@ import { CSS } from '@dnd-kit/utilities'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import { useConfirm } from 'material-ui-confirm'
-import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
+import { createNewCardAPI, deleteColumnDetailsAPI, updateColumnDetailsAPI } from '~/apis'
 import { cloneDeep } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectCurrentActiveBoard, updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
+
 
 function Column({ column }) {
   const board = useSelector(selectCurrentActiveBoard)
@@ -51,7 +53,7 @@ function Column({ column }) {
   const handleClick = (event) => setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
 
-  // Cards đã được sắp xếp ở component cha cao nhất (boards/_id.jsx) (Video 71 đã giải thích lý do)
+  // Cards đã được sắp xếp ở component cha cao nhất (boards/_id.jsx)
   const orderedCards = column.cards
 
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
@@ -61,7 +63,7 @@ function Column({ column }) {
 
   const addNewCard = async () => {
     if (!newCardTitle) {
-      toast.error('Please enter Card Title!', { position: 'bottom-right' })
+      toast.error('Vui lòng nhập tiêu đề thẻ!', { position: 'bottom-right' })
       return
     }
 
@@ -113,10 +115,10 @@ function Column({ column }) {
   const confirmDeleteColumn = useConfirm()
   const handleDeleteColumn = () => {
     confirmDeleteColumn({
-      title: 'Delete Column?',
-      description: 'This action will permanently delete your Column and its Cards! Are you sure?',
-      confirmationText: 'Confirm',
-      cancellationText: 'Cancel',
+      title: 'Xóa cột?',
+      description: 'Hành động này sẽ xóa vĩnh viễn cột và tất cả thẻ bên trong nó, tiếp tục?',
+      confirmationText: 'Xác nhận',
+      cancellationText: 'Hủy',
       // buttonOrder: ['confirm', 'cancel']
       // content: 'test content hehe',
       // allowClose: false,
@@ -136,7 +138,17 @@ function Column({ column }) {
       })
     }).catch(() => {})
   }
-
+  const onUpdateColumnTitle = (newTitle) => {
+    //goi api cap nhat column title
+    updateColumnDetailsAPI(column._id, { title: newTitle }).then(() => {
+      const newBoard = cloneDeep(board)
+      const columnToUpdate = newBoard.columns.find(c => column._id === c._id)
+      if (columnToUpdate) {
+        columnToUpdate.title = newTitle
+      }
+      dispatch(updateCurrentActiveBoard(newBoard))
+    } )
+  }
   // Phải bọc div ở đây vì vấn đề chiều cao của column khi kéo thả sẽ có bug kiểu kiểu flickering
   return (
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
@@ -160,13 +172,11 @@ function Column({ column }) {
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
-          <Typography variant="h6" sx={{
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            cursor: 'pointer'
-          }}>
-            {column?.title}
-          </Typography>
+          <ToggleFocusInput
+            value={column?.title}
+            onChangedValue={onUpdateColumnTitle}
+            data-no-dnd="true"
+          />
           <Box>
             <Tooltip title="More options">
               <ExpandMoreIcon
@@ -198,21 +208,8 @@ function Column({ column }) {
                 }}
               >
                 <ListItemIcon><AddCardIcon className="add-card-icon" fontSize="small" /></ListItemIcon>
-                <ListItemText>Add new card</ListItemText>
+                <ListItemText>Thêm thẻ mới</ListItemText>
               </MenuItem>
-              <MenuItem>
-                <ListItemIcon><ContentCut fontSize="small" /></ListItemIcon>
-                <ListItemText>Cut</ListItemText>
-              </MenuItem>
-              <MenuItem>
-                <ListItemIcon><ContentCopy fontSize="small" /></ListItemIcon>
-                <ListItemText>Copy</ListItemText>
-              </MenuItem>
-              <MenuItem>
-                <ListItemIcon><ContentPaste fontSize="small" /></ListItemIcon>
-                <ListItemText>Paste</ListItemText>
-              </MenuItem>
-              <Divider />
               <MenuItem
                 onClick={handleDeleteColumn}
                 sx={{
@@ -223,11 +220,7 @@ function Column({ column }) {
                 }}
               >
                 <ListItemIcon><DeleteForeverIcon className="delete-forever-icon" fontSize="small" /></ListItemIcon>
-                <ListItemText>Delete this column</ListItemText>
-              </MenuItem>
-              <MenuItem>
-                <ListItemIcon><Cloud fontSize="small" /></ListItemIcon>
-                <ListItemText>Archive this column</ListItemText>
+                <ListItemText>Xóa cột</ListItemText>
               </MenuItem>
             </Menu>
           </Box>
@@ -235,7 +228,6 @@ function Column({ column }) {
 
         {/* List Cards */}
         <ListCards cards={orderedCards} />
-
         {/* Box Column Footer */}
         <Box sx={{
           height: (theme) => theme.Wms.columnFooterHeight,
@@ -248,8 +240,8 @@ function Column({ column }) {
               alignItems: 'center',
               justifyContent: 'space-between'
             }}>
-              <Button startIcon={<AddCardIcon />} onClick={toggleOpenNewCardForm}>Add new card</Button>
-              <Tooltip title="Drag to move">
+              <Button startIcon={<AddCardIcon />} onClick={toggleOpenNewCardForm}>Thêm thẻ</Button>
+              <Tooltip title="Kéo để di chuyển cột">
                 <DragHandleIcon sx={{ cursor: 'pointer' }} />
               </Tooltip>
             </Box>
@@ -260,7 +252,7 @@ function Column({ column }) {
               gap: 1
             }}>
               <TextField
-                label="Enter card title..."
+                label="Nhập tiêu đề thẻ..."
                 type="text"
                 size="small"
                 variant="outlined"
@@ -296,7 +288,9 @@ function Column({ column }) {
                     borderColor: (theme) => theme.palette.success.main,
                     '&:hover': { bgcolor: (theme) => theme.palette.success.main }
                   }}
-                >Add</Button>
+                >
+                  Thêm
+                </Button>
                 <CloseIcon
                   fontSize="small"
                   sx={{

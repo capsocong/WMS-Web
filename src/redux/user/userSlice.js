@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
 
@@ -9,8 +10,26 @@ const initialState = {
 // những hành động gọi api (bất đồng bộ) và cập nhật dữ liệu vào redux, sử dụng Middleware createAsyncThunk
 // đi kèm với extraReducers
 
-export const loginUserApi = createAsyncThunk(
-  'user/loginUserApi',
+export const logOutUserAPI = createAsyncThunk(
+  'user/logOutUserAPI',
+  async (messageSuccess = true) => {
+    const response = await authorizeAxiosInstance.delete(`${API_ROOT}/v1/users/logout`)
+    if (messageSuccess) {
+      // hiển thị thông báo thành công
+      toast.success('Logout successfully!', { theme: 'colored' })
+    }
+    return response.data
+  }
+)
+export const updateUserAPI = createAsyncThunk(
+  'user/updateUserAPI',
+  async (data) => {
+    const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/users/update`, data)
+    return response.data
+  }
+)
+export const loginUserAPI = createAsyncThunk(
+  'user/loginUserAPI',
   async (data) => {
     const response = await authorizeAxiosInstance.post(`${API_ROOT}/v1/users/login`, data)
     return response.data
@@ -26,10 +45,18 @@ export const userSlice = createSlice({
 
   // nơi xử lý dữ liệu bất đồng bộ
   extraReducers: (builder) => {
-    builder.addCase(loginUserApi.fulfilled, (state, action) => {
+    builder.addCase(loginUserAPI.fulfilled, (state, action) => {
     // action.payload là dữ liệu trả về từ api
       const user = action.payload
       // xử lý dữ liệu nếu cần thiết
+      state.currentUser = user
+    })
+    builder.addCase(logOutUserAPI.fulfilled, (state) => {
+      // khi đăng xuất thành công thì xóa dữ liệu currentUser
+      state.currentUser = null
+    })
+    builder.addCase(updateUserAPI.fulfilled, (state, action) => {
+      const user = action.payload
       state.currentUser = user
     })
   }

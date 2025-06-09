@@ -26,13 +26,44 @@ export const activeBoardSlice = createSlice({
   // nơi xử lý dữ liệu đồng bộ
   reducers: {
     updateCurrentActiveBoard: (state, actions) => {
-    // actions.payload là chuẩn đặt tên nhận dữ liệu vào reducer
+      // actions.payload là chuẩn đặt tên nhận dữ liệu vào reducer
       const board = actions.payload
-
       // xử lý dữ liệu nếu cần thiết
-
       // update lại dữ liệu của currentActiveBoard
       state.currentActiveBoard = board
+    },
+    updatedCardInBoard: (state, action) => {
+      //update nested data trong currentActiveBoard
+      const incomingCard = action.payload
+      //tìm dần từ board -> columns -> cards để cập nhật
+      const column = state.currentActiveBoard.columns.find(col => col._id === incomingCard.columnId)
+      if (column) {
+        const card = column.cards.find(c => c._id === incomingCard._id)
+        if (card) {
+          card.title = incomingCard.title
+          card.description = incomingCard.description
+          card.cover = incomingCard.cover
+        }
+      }
+    },
+    deletedCardInBoard: (state, action) => {
+      //delete card in currentActiveBoard
+      const cardToDelete = action.payload
+      //tìm column chứa card cần xóa
+      const column = state.currentActiveBoard.columns.find(col => col._id === cardToDelete.columnId)
+      if (column) {
+        // Xóa card khỏi mảng cards
+        column.cards = column.cards.filter(c => c._id !== cardToDelete._id)
+        // Xóa card khỏi mảng cardOrderIds
+        column.cardOrderIds = column.cardOrderIds.filter(id => id !== cardToDelete._id)
+        
+        // Nếu column rỗng sau khi xóa card, thêm placeholder card
+        if (isEmpty(column.cards)) {
+          const placeholderCard = generatePlaceholderCard(column)
+          column.cards = [placeholderCard]
+          column.cardOrderIds = [placeholderCard._id]
+        }
+      }
     }
   },
   // nơi xử lý dữ liệu bất đồng bộ
@@ -40,6 +71,9 @@ export const activeBoardSlice = createSlice({
     builder.addCase(fetchBoardDetailsAPI.fulfilled, (state, action) => {
     // action.payload là dữ liệu trả về từ api
       let board = action.payload
+
+      // thành viên trong board sẽ là gộp lại của 2 mảng owners và members
+      board.FE_allUsers = board.owners.concat(board.members)
       // xử lý dữ liệu nếu cần thiết
       board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
       // tao placeholdercard cho cac column
@@ -64,7 +98,7 @@ export const activeBoardSlice = createSlice({
 // Actions là nơi dành cho các components bên dưới gọi bằng dispatch() tới nó để cập nhật lại dữ liệu thông qua reducer(chạy đông bộ)
 // để ý ở trên sẽ không thấy property nào là actions, mà sẽ có property là reducers
 // vì redux toolkit đã tự động tạo ra cho chúng ta
-export const { updateCurrentActiveBoard } = activeBoardSlice.actions
+export const { updateCurrentActiveBoard, updatedCardInBoard, deletedCardInBoard } = activeBoardSlice.actions
 // selectors là nơi để lấy dữ liệu từ redux store gọi bằng useSelector()
 export const selectCurrentActiveBoard = (state) => {
   return state.activeBoard.currentActiveBoard

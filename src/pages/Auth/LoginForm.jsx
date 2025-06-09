@@ -20,7 +20,7 @@ import {
 } from '~/utils/validators'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { loginUserApi } from '~/redux/user/userSlice'
+import { loginUserAPI } from '~/redux/user/userSlice'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 
@@ -37,8 +37,8 @@ function LoginForm() {
     // console.log('🚀 ~ LoginForm ~ data:', data)
     const { email, password } = data
     toast.promise(
-      dispatch(loginUserApi({ email, password })),
-      { pending: 'Logging in your account...' }
+      dispatch(loginUserAPI({ email, password })),
+      { pending: 'Đang đăng nhập vào tài khoản...' }
     ).then((res) => {
       // console.log('🚀 ~ LoginForm ~ res:', res)
       if (!res.error) {
@@ -65,17 +65,16 @@ function LoginForm() {
 
             {verifiedEmail &&
             <Alert severity="success" sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}>
-              Your email&nbsp;
+              Email của bạn&nbsp;
               <Typography variant="span" sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}>{verifiedEmail}</Typography>
-              &nbsp;has been verified.<br />Now you can login to enjoy our services! Have a good day!
+              &nbsp;đã được xác minh.<br />Bây giờ bạn có thể đăng nhập để tận hưởng dịch vụ của chúng tôi! Chúc bạn một ngày tốt lành!
             </Alert>
             }
-
             {registeredEmail &&
             <Alert severity="info" sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}>
-              An email has been sent to&nbsp;
+              Một email đã được gửi đến&nbsp;
               <Typography variant="span" sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}>{registeredEmail}</Typography>
-              <br />Please check and verify your account before logging in!
+              <br />Vui lòng kiểm tra và xác minh tài khoản của bạn trước khi đăng nhập!
             </Alert>
             }
 
@@ -83,10 +82,9 @@ function LoginForm() {
           <Box sx={{ padding: '0 1em 1em 1em' }}>
             <Box sx={{ marginTop: '1em' }}>
               <TextField
-                // autoComplete="nope"
                 autoFocus
                 fullWidth
-                label="Enter Email..."
+                label="Nhập email..."
                 type="text"
                 variant="outlined"
                 error={!!errors['email']}
@@ -103,7 +101,7 @@ function LoginForm() {
             <Box sx={{ marginTop: '1em' }}>
               <TextField
                 fullWidth
-                label="Enter Password..."
+                label="Nhập mật khẩu..."
                 type="password"
                 variant="outlined"
                 error={!!errors['password']}
@@ -128,13 +126,13 @@ function LoginForm() {
               size="large"
               fullWidth
             >
-              Login
+              Đăng nhập
             </Button>
           </CardActions>
           <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center' }}>
-            <Typography></Typography>
+            <Typography>Bạn đã có tài khoản chưa?</Typography>
             <Link to="/register" style={{ textDecoration: 'none' }}>
-              <Typography sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}>Create account!</Typography>
+              <Typography sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}>Đăng ký</Typography>
             </Link>
           </Box>
         </MuiCard>

@@ -1,12 +1,9 @@
-/**
- * YouTube: TrungQuanDev - Một Lập Trình Viên
- * Created by trungquandev.com's author on Jun 28, 2023
- */
+
 export const mockData = {
   board: {
     _id: 'board-id-01',
-    title: 'TrungQuanDev MERN Stack Board',
-    description: 'Pro MERN stack Course',
+    title: ' Stack Board',
+    description: 'stack Course',
     type: 'public', // 'private'
     ownerIds: [], // Những users là Admin của board
     memberIds: [], // Những users là member bình thường của board
@@ -23,8 +20,8 @@ export const mockData = {
             boardId: 'board-id-01',
             columnId: 'column-id-01',
             title: 'Title of card 01',
-            description: 'Markdown Syntax (sẽ ở khóa nâng cao nhé)',
-            cover: 'https://trungquandev.com/wp-content/uploads/2022/07/fair-mern-stack-advanced-banner-trungquandev.jpg',
+            description: 'Markdown Syntax',
+            cover: 'https://scontent-hkg1-2.xx.fbcdn.net/v/t39.30808-1/495541821_122230017956029709_2486229336548815633_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=103&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeFmFpqRQUfbEHDQU0U3whiB9K6dSakap270rp1JqRqnbjrAlBCZG6Hp59JDKVOHhG0RJMvkGuc4Ek4RNI86cP1L&_nc_ohc=t83gWnzd5xQQ7kNvwEAAQID&_nc_oc=AdkvCrsBOmmlbhVkQBBkCXWADXGvx4GevfR08TsVWrdx5ryAnMrklXMKS6QTpulvzkmu5pLAmT69COprPtHELJn_&_nc_zt=24&_nc_ht=scontent-hkg1-2.xx&_nc_gid=PdDLNCC7BzfwkB_KnQs6tw&oh=00_AfKUsCXNyRt7m-zBkPTjcxSQ3SMD_QNO4igHyx-ZKs3-Dg&oe=683F55CA',
             memberIds: ['test-user-id-01'],
             comments: ['test comment 01', 'test comment 02'],
             attachments: ['test attachment 01', 'test attachment 02', 'test attachment 03']
@@ -64,13 +61,12 @@ export const mockData = {
         boardId: 'board-id-01',
         title: 'Empty Column 04',
         /**
-         * Video 37.2: Cách xử lý bug logic thư viện Dnd-kit khi Column là rỗng:
+         * Cách xử lý bug logic thư viện Dnd-kit khi Column là rỗng:
          * Phía FE sẽ tự tạo ra một cái card đặc biệt: Placeholder Card, không liên quan tới Back-end
          * Card đặc biệt này sẽ được ẩn ở giao diện UI người dùng.
          * Cấu trúc Id của cái card này để Unique rất đơn giản, không cần phải làm random phức tạp:
          * "columnId-placeholder-card" (mỗi column chỉ có thể có tối đa một cái Placeholder Card)
          * Quan trọng khi tạo: phải đầy đủ: (_id, boardId, columnId, FE_PlaceholderCard)
-         *** Kỹ hơn nữa về cách tạo chuẩn ở bước nào thì sẽ ở học phần tích hợp API Back-end vào dự án. (bởi vì đây là file mock-data)
          */
         cardOrderIds: ['column-id-04-placeholder-card'],
         cards: [

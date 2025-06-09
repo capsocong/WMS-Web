@@ -3,7 +3,7 @@ import Container from '@mui/material/Container'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
-
+import ActiveCard from '~/components/Modal/ActiveCard/ActiveCard'
 // import { mockData } from '~/apis/mock-data'
 import {
   updateBoardDetailsAPI,
@@ -19,13 +19,14 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
-
+import { selectCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 function Board() {
   // const [board, setBoard] = useState(null)
   // không dùng state của react nữa mà dùng state của redux
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
+  const activeCard = useSelector(selectCurrentActiveCard)
   const { boardId } = useParams()
   useEffect(() => {
     // Call API
@@ -46,11 +47,9 @@ function Board() {
     newBoard.columnOrderIds = dndOrderedColumnsIds
     // setBoard(newBoard)
     dispatch(updateCurrentActiveBoard(newBoard))
-
     // Gọi API update Board
     updateBoardDetailsAPI(newBoard._id, { columnOrderIds: dndOrderedColumnsIds })
   }
-
   /**
    * Khi di chuyển card trong cùng Column:
    * Chỉ cần gọi API để cập nhật mảng cardOrderIds của Column chứa nó (thay đổi vị trí trong mảng)
@@ -72,10 +71,9 @@ function Board() {
 
   /**
    * Khi di chuyển card sang Column khác:
-   * B1: Cập nhật mảng cardOrderIds của Column ban đầu chứa nó (Hiểu bản chất là xóa cái _id của Card ra khỏi mảng)
-   * B2: Cập nhật mảng cardOrderIds của Column tiếp theo (Hiểu bản chất là thêm _id của Card vào mảng)
+   * B1: Cập nhật mảng cardOrderIds của Column ban đầu chứa nó (xóa cái _id của Card ra khỏi mảng)
+   * B2: Cập nhật mảng cardOrderIds của Column tiếp theo (thêm _id của Card vào mảng)
    * B3: Cập nhật lại trường columnId mới của cái Card đã kéo
-   * => Làm một API support riêng.
    */
   const moveCardToDifferentColumn = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
     // Update cho chuẩn dữ liệu state Board
@@ -85,7 +83,6 @@ function Board() {
     newBoard.columnOrderIds = dndOrderedColumnsIds
     // setBoard(newBoard)
     dispatch(updateCurrentActiveBoard(newBoard))
-
     // Gọi API xử lý phía BE
     let prevCardOrderIds = dndOrderedColumns.find(c => c._id === prevColumnId)?.cardOrderIds
     // Xử lý vấn đề khi kéo Card cuối cùng ra khỏi Column, Column rỗng sẽ có placeholder card, cần xóa nó đi trước khi gửi dữ liệu lên cho phía BE. (Nhớ lại video 37.2)
@@ -106,6 +103,12 @@ function Board() {
   }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+      {/* Modal Active Card check đóng mở dựa theo điều kiện có tồn tại data activeCard trong
+      redux hay không thì mới render */}
+      {activeCard && <ActiveCard /> }
+      {/* <ActiveCard /> */}
+
+      {/*các thành phần còn lại của board detail */}
       <AppBar />
       <BoardBar board={board} />
       <BoardContent
