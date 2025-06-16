@@ -2,24 +2,31 @@ import { Card as MuiCard } from '@mui/material'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
-import GroupIcon from '@mui/icons-material/Group'
 import CommentIcon from '@mui/icons-material/Comment'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
+import Avatar from '@mui/material/Avatar'
+import AvatarGroup from '@mui/material/AvatarGroup'
+import Box from '@mui/material/Box'
+import CardLabels from '~/components/Card/CardLabels'
 
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
+import { selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+
 
 function Card({ card }) {
   const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card._id,
     data: { ...card }
   })
+  
   const dndKitCardStyles = {
     // touchAction: 'none', // Dành cho sensor default dạng PointerSensor
     // https://github.com/clauderic/dnd-kit/issues/117
@@ -32,9 +39,21 @@ function Card({ card }) {
   const shouldShowCardActions = () => {
     return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   }
+
   const setActiveCard = () => {
     dispatch(updateCurrentActiveCard(card))
   }
+
+  // Lấy thông tin members được assign
+  const getAssignedMembers = () => {
+    if (!card?.memberIds?.length || !board?.FE_allUsers) return []
+    
+    return board.FE_allUsers.filter(user => 
+      card.memberIds.includes(user._id)
+    ).slice(0, 3) // Chỉ hiển thị tối đa 3 avatars
+  }
+
+  const assignedMembers = getAssignedMembers()
   return (
     <MuiCard
       onClick={setActiveCard}
@@ -52,13 +71,31 @@ function Card({ card }) {
     >
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} /> }
       <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
+        {/* Hiển thị labels */}
+        <CardLabels labels={card?.labels} />
         <Typography>{card?.title}</Typography>
       </CardContent>
       {shouldShowCardActions() &&
         <CardActions sx={{ p: '0 4px 8px 4px' }}>
-          {!!card?.memberIds?.length &&
-            <Button size="small" startIcon={<GroupIcon />}>{card?.memberIds?.length}</Button>
-          }
+          {!!card?.memberIds?.length && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <AvatarGroup max={3} sx={{ '& .MuiAvatar-root': { width: 20, height: 20, fontSize: '0.75rem' } }}>
+                {assignedMembers.map(member => (
+                  <Avatar
+                    key={member._id}
+                    src={member.avatar}
+                    alt={member.displayName}
+                    title={member.displayName}
+                  />
+                ))}
+              </AvatarGroup>
+              {card.memberIds.length > 3 && (
+                <Typography variant="caption" sx={{ ml: 0.5 }}>
+                  +{card.memberIds.length - 3}
+                </Typography>
+              )}
+            </Box>
+          )}
           {!!card?.comments?.length &&
             <Button size="small" startIcon={<CommentIcon />}>{card?.comments?.length}</Button>
           }

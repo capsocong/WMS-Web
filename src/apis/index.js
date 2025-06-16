@@ -34,6 +34,20 @@ export const createNewCardAPI = async (newCardData) => {
   return response.data
 }
 
+export const updateCardDetailAPI = async (cardId, updateData) => {
+  const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/cards/${cardId}`, updateData)
+  return response.data
+}
+
+export const deleteCardAPI = async (cardId) => {
+  const response = await authorizeAxiosInstance.delete(`${API_ROOT}/v1/cards/${cardId}`)
+  return response.data
+}
+
+export const fetchDefaultLabelsAPI = async () => {
+  const response = await authorizeAxiosInstance.get(`${API_ROOT}/v1/cards/default-labels`)
+  return response.data
+}
 
 /** Users */
 export const registerUserAPI = async (data) => {
@@ -51,6 +65,17 @@ export const verifyUserAPI = async (data) => {
 
 export const refreshTokenAPI = async (data) => {
   const response = await authorizeAxiosInstance.get(`${API_ROOT}/v1/users/refresh_token`, data)
+  return response.data
+}
+
+/** Member Management */
+export const updateMemberRoleAPI = async (boardId, memberId, role) => {
+  const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/boards/${boardId}/members/${memberId}/role`, { role })
+  return response.data
+}
+
+export const removeMemberAPI = async (boardId, memberId) => {
+  const response = await authorizeAxiosInstance.delete(`${API_ROOT}/v1/boards/${boardId}/members/${memberId}`)
   return response.data
 }
 
@@ -74,19 +99,30 @@ export const deleteBoardAPI = async (boardId) => {
   return response.data
 }
 
-export const updateCardDetailAPI = async (cardId, updateData) => {
-  const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/cards/${cardId}`, updateData)
-  return response.data
-}
+// export const updateCardDetailAPI = async (cardId, updateData) => {
+//   const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/cards/${cardId}`, updateData)
+//   return response.data
+// }
 
-export const deleteCardAPI = async (cardId) => {
-  const response = await authorizeAxiosInstance.delete(`${API_ROOT}/v1/cards/${cardId}`)
-  return response.data
-}
+// export const deleteCardAPI = async (cardId) => {
+//   const response = await authorizeAxiosInstance.delete(`${API_ROOT}/v1/cards/${cardId}`)
+//   return response.data
+// }
 
 export const inviteUserToBoardAPI = async (data) => {
   const response = await authorizeAxiosInstance.post(`${API_ROOT}/v1/invitations/board`, data)
   toast.success('Mời người dùng vào bảng thành công! chờ họ xác nhận nhé!')
+  return response.data
+}
+
+/** Card Member Assignment */
+export const assignMemberToCardAPI = async (cardId, memberId) => {
+  const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/cards/${cardId}/assign-member`, { memberId })
+  return response.data
+}
+
+export const unassignMemberFromCardAPI = async (cardId, memberId) => {
+  const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/cards/${cardId}/unassign-member`, { memberId })
   return response.data
 }
 

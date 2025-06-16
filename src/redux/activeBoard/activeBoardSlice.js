@@ -31,8 +31,7 @@ export const activeBoardSlice = createSlice({
       // xử lý dữ liệu nếu cần thiết
       // update lại dữ liệu của currentActiveBoard
       state.currentActiveBoard = board
-    },
-    updatedCardInBoard: (state, action) => {
+    }, updatedCardInBoard: (state, action) => {
       //update nested data trong currentActiveBoard
       const incomingCard = action.payload
       //tìm dần từ board -> columns -> cards để cập nhật
@@ -43,6 +42,8 @@ export const activeBoardSlice = createSlice({
           card.title = incomingCard.title
           card.description = incomingCard.description
           card.cover = incomingCard.cover
+          card.labels = incomingCard.labels || []
+          card.memberIds = incomingCard.memberIds || []
         }
       }
     },
@@ -56,7 +57,7 @@ export const activeBoardSlice = createSlice({
         column.cards = column.cards.filter(c => c._id !== cardToDelete._id)
         // Xóa card khỏi mảng cardOrderIds
         column.cardOrderIds = column.cardOrderIds.filter(id => id !== cardToDelete._id)
-        
+
         // Nếu column rỗng sau khi xóa card, thêm placeholder card
         if (isEmpty(column.cards)) {
           const placeholderCard = generatePlaceholderCard(column)
@@ -94,7 +95,7 @@ export const activeBoardSlice = createSlice({
   }
 })
 
-// Action creators are generated for each case reducer function
+// Action creators are generated afor ech case reducer function
 // Actions là nơi dành cho các components bên dưới gọi bằng dispatch() tới nó để cập nhật lại dữ liệu thông qua reducer(chạy đông bộ)
 // để ý ở trên sẽ không thấy property nào là actions, mà sẽ có property là reducers
 // vì redux toolkit đã tự động tạo ra cho chúng ta

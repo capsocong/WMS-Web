@@ -1,17 +1,17 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-// import Typography from '@mui/material/Typography'
+import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-// import Divider from '@mui/material/Divider'
+import Divider from '@mui/material/Divider'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
-// import ContentCut from '@mui/icons-material/ContentCut'
-// import ContentCopy from '@mui/icons-material/ContentCopy'
-// import ContentPaste from '@mui/icons-material/ContentPaste'
-// import Cloud from '@mui/icons-material/Cloud'
+import ContentCut from '@mui/icons-material/ContentCut'
+import ContentCopy from '@mui/icons-material/ContentCopy'
+import ContentPaste from '@mui/icons-material/ContentPaste'
+import Cloud from '@mui/icons-material/Cloud'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Tooltip from '@mui/material/Tooltip'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
@@ -63,7 +63,7 @@ function Column({ column }) {
 
   const addNewCard = async () => {
     if (!newCardTitle) {
-      toast.error('Vui lòng nhập tiêu đề thẻ!', { position: 'bottom-right' })
+      toast.error('Please enter Card Title!', { position: 'bottom-right' })
       return
     }
 
@@ -222,12 +222,17 @@ function Column({ column }) {
                 <ListItemIcon><DeleteForeverIcon className="delete-forever-icon" fontSize="small" /></ListItemIcon>
                 <ListItemText>Xóa cột</ListItemText>
               </MenuItem>
+              {/* <MenuItem>
+                <ListItemIcon><Cloud fontSize="small" /></ListItemIcon>
+                <ListItemText>Lưu trữ cột</ListItemText>
+              </MenuItem> */}
             </Menu>
           </Box>
         </Box>
 
         {/* List Cards */}
         <ListCards cards={orderedCards} />
+
         {/* Box Column Footer */}
         <Box sx={{
           height: (theme) => theme.Wms.columnFooterHeight,

@@ -8,6 +8,7 @@ import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import Logout from '@mui/icons-material/Logout'
+import AdminPanelSettings from '@mui/icons-material/AdminPanelSettings'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { logOutUserAPI } from '~/redux/user/userSlice'
@@ -75,6 +76,7 @@ function Profiles() {
             /> Thông tin cá nhân
           </MenuItem>
         </Link>
+
         <Divider />
         {/* <MenuItem>
           <ListItemIcon>

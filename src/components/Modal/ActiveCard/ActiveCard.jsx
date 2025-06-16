@@ -28,10 +28,13 @@ import SubjectRoundedIcon from '@mui/icons-material/SubjectRounded'
 
 import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
+import CardLabels from '~/components/Card/CardLabels'
+import CardMemberAssignment_new from '~/components/Card/CardMemberAssignment_new'
 import { singleFileValidator } from '~/utils/validators'
 import { toast } from 'react-toastify'
 // import CardUserGroup from './CardUserGroup'
 import CardDescriptionMdEditor from './CardDescriptionMdEditor'
+import CardLabelManager from './CardLabelManager'
 // import CardActivitySection from './CardActivitySection'
 import { useDispatch, useSelector } from 'react-redux'
 import { useConfirm } from 'material-ui-confirm'
@@ -68,7 +71,7 @@ const SidebarItem = styled(Box)(({ theme }) => ({
 }))
 
 /**
- * Note: Modal là một low-component mà bọn MUI sử dụng bên trong những thứ như Dialog, Drawer, Menu, Popover. Ở đây dĩ nhiên chúng ta có thể sử dụng Dialog cũng không thành vấn đề gì, nhưng sẽ sử dụng Modal để dễ linh hoạt tùy biến giao diện từ con số 0 cho phù hợp với mọi nhu cầu nhé.
+ * Note: Modal là một low-component mà bọn MUI sử dụng bên trong những thứ như Dialog, Drawer, Menu, Popover. 
  */
 function ActiveCard() {
   const dispatch = useDispatch()
@@ -92,6 +95,9 @@ function ActiveCard() {
   }
   const onUpdateCardDescription = (newDescription) => {
     callApiUpdateCard({ description: newDescription })
+  }
+  const onUpdateCardLabels = (newLabels) => {
+    callApiUpdateCard({ labels: newLabels })
   }
   const onUploadCardCover = (event) => {
     // console.log(event.target?.files[0])
@@ -185,14 +191,21 @@ function ActiveCard() {
             onChangedValue={onUpdateCardTitle} />
         </Box>
 
+        {/* Hiển thị labels */}
+        {activeCard?.labels && activeCard.labels.length > 0 && (
+          <Box sx={{ mb: 2, pr: 2.5 }}>
+            <CardLabels labels={activeCard.labels} />
+          </Box>
+        )}
+
         <Grid container spacing={2} sx={{ mb: 3 }}>
           {/* Left side */}
           <Grid xs={12} sm={9}>
             <Box sx={{ mb: 3 }}>
-              <Typography sx={{ fontWeight: '600', color: 'primary.main', mb: 1 }}>Thành viên</Typography>
+              {/* <Typography sx={{ fontWeight: '600', color: 'primary.main', mb: 1 }}>Thành viên</Typography> */}
 
               {/* Feature 02: Xử lý các thành viên của Card */}
-              {/* <CardUserGroup /> */}
+              <CardMemberAssignment_new card={activeCard} />
             </Box>
 
             <Box sx={{ mb: 3 }}>
@@ -228,7 +241,12 @@ function ActiveCard() {
                 <PersonOutlineOutlinedIcon fontSize="small" />
                 Tham gia
               </SidebarItem> */}
-              {/* Feature 06: Xử lý hành động cập nhật ảnh Cover của Card */}
+              {/* Feature 06: Xử lý quản lý nhãn của Card */}
+              <CardLabelManager
+                cardLabels={activeCard?.labels || []}
+                onUpdateLabels={onUpdateCardLabels}
+              />
+              {/* Feature 07: Xử lý hành động cập nhật ảnh Cover của Card */}
               <SidebarItem className="active" component="label">
                 <ImageOutlinedIcon fontSize="small" />
                 Ảnh bìa

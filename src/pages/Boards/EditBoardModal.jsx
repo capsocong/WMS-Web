@@ -42,7 +42,7 @@ function EditBoardModal({ board, isOpen, onClose, afterUpdateBoard }) {
 
   const submitUpdateBoard = async (data) => {
     if (!board || !board._id) {
-      toast.error('Không tìm thấy thông tin bảng để cập nhật!')
+      // toast.error('Không tìm thấy thông tin bảng để cập nhật!')
       return
     }
     try {
@@ -50,7 +50,7 @@ function EditBoardModal({ board, isOpen, onClose, afterUpdateBoard }) {
       handleCloseModal()
       afterUpdateBoard()
     } catch (error) {
-      toast.error('Có lỗi xảy ra khi cập nhật bảng!')
+      // toast.error('Có lỗi xảy ra khi cập nhật bảng!')
     }
   }
   return (

@@ -22,22 +22,22 @@ const SidebarItem = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   gap: '8px',
   cursor: 'pointer',
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  backgroundColor: theme.palette.mode === 'dark' ? '#34495e' : '#fff',
   padding: '12px 16px',
   borderRadius: '8px',
   '&:hover': {
-    backgroundColor: theme.palette.mode === 'dark' ? '#33485D' : theme.palette.grey[300]
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : theme.palette.grey[300]
   },
   '&.active': {
     color: theme.palette.mode === 'dark' ? '#90caf9' : '#0c66e4',
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#e9f2ff'
   }
 }))
-
+// 34495e  33485D
 // BOARD_TYPES tương tự bên model phía Back-end (nếu cần dùng nhiều nơi thì hãy đưa ra file constants, không thì cứ để ở đây)
 const BOARD_TYPES = {
-  PUBLIC: 'public',
-  PRIVATE: 'private'
+  PUBLIC: 'Công khai',
+  PRIVATE: 'Riêng tư'
 }
 
 /**
@@ -178,13 +178,13 @@ function SidebarCreateBoardModal({ afterCreateNewBoard }) {
                       <FormControlLabel
                         value={BOARD_TYPES.PUBLIC}
                         control={<Radio size="small" />}
-                        label="Public"
+                        label="Công khai"
                         labelPlacement="start"
                       />
                       <FormControlLabel
                         value={BOARD_TYPES.PRIVATE}
                         control={<Radio size="small" />}
-                        label="Private"
+                        label="Riêng tư"
                         labelPlacement="start"
                       />
                     </RadioGroup>

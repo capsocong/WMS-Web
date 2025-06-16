@@ -25,7 +25,7 @@ function ListColumns({ columns }) {
 
   const addNewColumn = async () => {
     if (!newColumnTitle) {
-      toast.error('Vui lòng nhập tiêu đề cột!')
+      toast.error('Please enter Column Title!')
       return
     }
 
@@ -66,7 +66,7 @@ function ListColumns({ columns }) {
   }
 
   /**
-   * SortableContext yêu cầu items là một mảng dạng ['id-1', 'id-2'] chứ không phải [{id: 'id-1'}, {id: 'id-2'}]
+   * Thằng SortableContext yêu cầu items là một mảng dạng ['id-1', 'id-2'] chứ không phải [{id: 'id-1'}, {id: 'id-2'}]
    * Nếu không đúng thì vẫn kéo thả được nhưng không có animation
    * https://github.com/clauderic/dnd-kit/issues/183#issuecomment-812569512
    */

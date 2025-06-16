@@ -42,7 +42,13 @@ function LoginForm() {
     ).then((res) => {
       // console.log('🚀 ~ LoginForm ~ res:', res)
       if (!res.error) {
-        navigate('/')
+        // Kiểm tra role của user và điều hướng tương ứng
+        const user = res.payload
+        if (user?.role === 'admin') {
+          navigate('/admin')
+        } else {
+          navigate('/boards')
+        }
       }
     })
   }

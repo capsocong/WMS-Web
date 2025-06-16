@@ -16,8 +16,15 @@ const theme = extendTheme({
     columnFooterHeight: COLUMN_FOOTER_HEIGHT
   },
   colorSchemes: {
-    light: {},
-    dark: {}
+    light: {
+    },
+    dark: {
+      palette: {
+        background: {
+          default: '#34495e'
+        }
+      }
+    }
   },
   components: {
     MuiCssBaseline: {

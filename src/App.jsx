@@ -14,12 +14,18 @@ const ProtectedRoute = ({ user }) => {
   }
   return <Outlet/>
 }
+
 function App() {
   const currentUser = useSelector(selectCurrentUser)
+  // Component to handle default redirect based on user role
+  const DefaultRedirect = () => {
+    return <Navigate to='/boards' replace />
+  }
+
   return (
     <Routes>
-      {/* Redirect to /boards */}
-      <Route path='/' element={<Navigate to='/boards' />} />
+      {/* Redirect to appropriate page based on user role */}
+      <Route path='/' element={<DefaultRedirect />} />
       {/* ProtectedRoute là những route chỉ cho truy cập sau khi đã login thành công  */}
       <Route element={<ProtectedRoute user={currentUser}/>}>
         {/* Board Details */}
