@@ -19,11 +19,11 @@ const theme = extendTheme({
     light: {
     },
     dark: {
-      palette: {
-        background: {
-          default: '#34495e'
-        }
-      }
+      // palette: {
+      //   background: {
+      //     default: '#34495e'
+      //   }
+      // }
     }
   },
   components: {
@@ -46,11 +46,22 @@ const theme = extendTheme({
     },
     MuiButton: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
           textTransform: 'none',
           borderWidth: '0.5px',
-          '&:hover': { borderWidth: '0.5px' }
-        }
+          borderRadius: '8px',
+          fontWeight: 500,
+          transition: 'all 0.2s ease',
+          '&:hover': {
+            borderWidth: '0.5px',
+            transform: 'none' // Remove bounce effect
+          },
+          // Responsive button sizes
+          [theme.breakpoints.down('sm')]: {
+            padding: '6px 12px',
+            fontSize: '0.75rem'
+          }
+        })
       }
     },
     MuiInputLabel: {
@@ -74,9 +85,19 @@ const theme = extendTheme({
           '&.Mui-focused fieldset': { borderWidth: '1px !important' }
         }
       }
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: '8px',
+          transition: 'all 0.2s ease',
+          '&:hover': {
+            transform: 'none' // Remove bounce effect
+          }
+        }
+      }
     }
   }
-  // ...other properties
 })
 
 export default theme

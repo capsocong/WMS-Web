@@ -25,7 +25,7 @@ function ListColumns({ columns }) {
 
   const addNewColumn = async () => {
     if (!newColumnTitle) {
-      toast.error('Please enter Column Title!')
+      toast.error('Vui lòng nhập tiêu đề cột mới!')
       return
     }
 

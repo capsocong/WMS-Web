@@ -23,7 +23,6 @@ import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { Link, useLocation } from 'react-router-dom'
-import randomColor from 'randomcolor'
 import SidebarCreateBoardModal from './create'
 import EditBoardModal from './EditBoardModal'
 import { fetchBoardsAPI, deleteBoardAPI } from '~/apis'
@@ -51,6 +50,31 @@ const SidebarItem = styled(Box)(({ theme }) => ({
 }))
 
 function Boards() {
+  // Function to get board background style for card cover
+  const getBoardCoverStyle = (board) => {
+    if (!board) {
+      return {
+        backgroundColor: '#1976d2' // Default color
+      }
+    }
+    if (board.backgroundType === 'image' && board.backgroundImage) {
+      return {
+        backgroundImage: `url(${board.backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }
+    } else if (board.backgroundType === 'color' && board.backgroundColor) {
+      return {
+        backgroundColor: board.backgroundColor
+      }
+    }
+    // Default fallback
+    return {
+      backgroundColor: '#1976d2'
+    }
+  }
+
   // Số lượng bản ghi boards hiển thị tối đa trên 1 page tùy dự án (thường sẽ là 12 cái)
   const [boards, setBoards] = useState(null)
   // Tổng toàn bộ số lượng bản ghi boards có trong Database mà phía BE trả về để FE dùng tính toán phân trang
@@ -188,9 +212,13 @@ function Boards() {
                     <Card sx={{ width: '250px', position: 'relative' }}>
                       {/* Ý tưởng mở rộng về sau làm ảnh Cover cho board nhé */}
                       {/* <CardMedia component="img" height="100" image="https://picsum.photos/100" /> */}
-                      <Box sx={{ height: '50px', backgroundColor: randomColor() }}></Box>
-
-                      <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
+                      <Box sx={{
+                        height: '100px',
+                        position: 'relative',
+                        display: 'flex',
+                        alignItems: 'flex-end',
+                        ...getBoardCoverStyle(b)
+                      }}>
                         {/* Dropdown menu button */}
                         <IconButton
                           sx={{
@@ -208,9 +236,24 @@ function Boards() {
                           <MoreVertIcon />
                         </IconButton>
 
-                        <Typography gutterBottom variant="h6" component="div">
+                        {/* Title overlay on cover */}
+                        <Typography
+                          variant="h6"
+                          component="div"
+                          sx={{
+                            color: 'white',
+                            fontWeight: 'bold',
+                            textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                            p: 2,
+                            width: '100%',
+                            background: 'linear-gradient(transparent, rgba(0,0,0,0.7))'
+                          }}
+                        >
                           {b?.title}
                         </Typography>
+                      </Box>
+
+                      <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
                         <Typography
                           variant="body2"
                           color="text.secondary"

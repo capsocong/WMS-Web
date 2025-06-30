@@ -1,5 +1,5 @@
 
-// Một vài biểu thức chính quy - Regular Expression và custom message.
+// biểu thức chính quy - Regular Expression và custom message.
 // Về Regular Expression: https://viblo.asia/p/hoc-regular-expression-va-cuoc-doi-ban-se-bot-kho-updated-v22-Az45bnoO5xY
 export const FIELD_REQUIRED_MESSAGE = 'Trường này là bắt buộc.'
 export const EMAIL_RULE = /^\S+@\S+\.\S+$/

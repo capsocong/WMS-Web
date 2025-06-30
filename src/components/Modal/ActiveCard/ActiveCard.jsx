@@ -29,12 +29,13 @@ import SubjectRoundedIcon from '@mui/icons-material/SubjectRounded'
 import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
 import CardLabels from '~/components/Card/CardLabels'
-import CardMemberAssignment_new from '~/components/Card/CardMemberAssignment_new'
+import CardMemberAssignment_new from '~/components/Card/CardMemberAssignment'
 import { singleFileValidator } from '~/utils/validators'
 import { toast } from 'react-toastify'
 // import CardUserGroup from './CardUserGroup'
-import CardDescriptionMdEditor from './CardDescriptionMdEditor'
+import CardDescriptionEditor from './CardDescriptionMdEditor'
 import CardLabelManager from './CardLabelManager'
+
 // import CardActivitySection from './CardActivitySection'
 import { useDispatch, useSelector } from 'react-redux'
 import { useConfirm } from 'material-ui-confirm'
@@ -71,7 +72,7 @@ const SidebarItem = styled(Box)(({ theme }) => ({
 }))
 
 /**
- * Note: Modal là một low-component mà bọn MUI sử dụng bên trong những thứ như Dialog, Drawer, Menu, Popover. 
+ * Note: Modal là một low-component mà bọn MUI sử dụng bên trong những thứ như Dialog, Drawer, Menu, Popover.
  */
 function ActiveCard() {
   const dispatch = useDispatch()
@@ -99,6 +100,7 @@ function ActiveCard() {
   const onUpdateCardLabels = (newLabels) => {
     callApiUpdateCard({ labels: newLabels })
   }
+  
   const onUploadCardCover = (event) => {
     // console.log(event.target?.files[0])
     const error = singleFileValidator(event.target?.files[0])
@@ -215,9 +217,9 @@ function ActiveCard() {
               </Box>
 
               {/* Feature 03: Xử lý mô tả của Card */}
-              <CardDescriptionMdEditor
-                cardDescriptionProp = {activeCard?.description}
-                handleUpdateCardDescription= {onUpdateCardDescription}
+              <CardDescriptionEditor
+                cardDescriptionProp={activeCard?.description}
+                handleUpdateCardDescription={onUpdateCardDescription}
               />
 
             </Box>

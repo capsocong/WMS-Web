@@ -24,7 +24,6 @@ function App() {
 
   return (
     <Routes>
-      {/* Redirect to appropriate page based on user role */}
       <Route path='/' element={<DefaultRedirect />} />
       {/* ProtectedRoute là những route chỉ cho truy cập sau khi đã login thành công  */}
       <Route element={<ProtectedRoute user={currentUser}/>}>

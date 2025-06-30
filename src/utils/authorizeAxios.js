@@ -46,7 +46,7 @@ authorizeAxiosInstance.interceptors.response.use((response) => {
   }
   // b2 nếu là lỗi 410 - GONE gọi api refreshTokenAPI để lấy token mới
   const originalRequest = error.config
-  console.log('originalRequest', originalRequest)
+  // console.log('originalRequest', originalRequest)
   if (error.response?.status === 410 && !originalRequest._retry) {
     originalRequest._retry = true
     if (!refreshTokenPromise) {

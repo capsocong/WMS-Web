@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles'
+// import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
@@ -57,7 +57,7 @@ function AccountTab() {
 
   const uploadAvatar = (e) => {
     // Lấy file thông qua e.target?.files[0] và validate nó trước khi xử lý
-    console.log('e.target?.files[0]: ', e.target?.files[0])
+    // console.log('e.target?.files[0]: ', e.target?.files[0])
     const error = singleFileValidator(e.target?.files[0])
     if (error) {
       toast.error(error)
@@ -67,9 +67,10 @@ function AccountTab() {
     let reqData = new FormData()
     reqData.append('avatar', e.target?.files[0])
     // Cách để log được dữ liệu thông qua FormData
-    console.log('reqData: ', reqData)
+    // console.log('reqData: ', reqData)
+    // eslint-disable-next-line no-unused-vars
     for (const value of reqData.values()) {
-      console.log('reqData Value: ', value)
+      // console.log('reqData Value: ', value)
     }
     // Gọi API...
     toast.promise(

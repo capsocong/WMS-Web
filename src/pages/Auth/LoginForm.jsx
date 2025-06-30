@@ -24,7 +24,6 @@ import { loginUserAPI } from '~/redux/user/userSlice'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 
-
 function LoginForm() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -34,21 +33,16 @@ function LoginForm() {
   const registeredEmail = searchParams.get('registeredEmail')
   const verifiedEmail = searchParams.get('verifiedEmail')
   const submitLogIn = (data) => {
-    // console.log('🚀 ~ LoginForm ~ data:', data)
     const { email, password } = data
     toast.promise(
       dispatch(loginUserAPI({ email, password })),
       { pending: 'Đang đăng nhập vào tài khoản...' }
     ).then((res) => {
-      // console.log('🚀 ~ LoginForm ~ res:', res)
-      if (!res.error) {
-        // Kiểm tra role của user và điều hướng tương ứng
-        const user = res.payload
-        if (user?.role === 'admin') {
-          navigate('/admin')
-        } else {
-          navigate('/boards')
-        }
+      if (res.error) {
+        toast.error('Đăng nhập thất bại! Vui lòng kiểm tra lại email hoặc mật khẩu của bạn')
+      } else {
+        toast.success('Đăng nhập thành công!')
+        navigate('/boards', { replace: true })
       }
     })
   }

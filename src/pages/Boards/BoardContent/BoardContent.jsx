@@ -352,6 +352,34 @@ function BoardContent({
     return lastOverId.current ? [{ id: lastOverId.current }] : []
   }, [activeDragItemType, orderedColumns])
 
+  // Function to get board background style like Trello
+  const getBoardBackgroundStyle = () => {
+    if (!board) {
+      return {
+        background: 'linear-gradient(135deg, #0079bf 0%, #026aa7 100%)'
+      }
+    }
+    
+    if (board.backgroundType === 'image' && board.backgroundImage) {
+      return {
+        background: `linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url(${board.backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'local'
+      }
+    } else if (board.backgroundType === 'color' && board.backgroundColor) {
+      return {
+        background: board.backgroundColor
+      }
+    }
+    
+    // Default background like Trello
+    return {
+      background: 'linear-gradient(135deg, #0079bf 0%, #026aa7 100%)'
+    }
+  }
+
   return (
     <DndContext
       // Cảm biến (đã giải thích kỹ ở video số 30)
@@ -367,10 +395,11 @@ function BoardContent({
       onDragEnd={handleDragEnd}
     >
       <Box sx={{
-        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
+        ...getBoardBackgroundStyle(),
         width: '100%',
         height: (theme) => theme.Wms.boardContentHeight,
-        p: '10px 0'
+        p: '10px 0',
+        position: 'relative'
       }}>
         <ListColumns
           columns={orderedColumns}

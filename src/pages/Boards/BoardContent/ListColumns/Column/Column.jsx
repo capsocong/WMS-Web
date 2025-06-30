@@ -1,17 +1,11 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import Divider from '@mui/material/Divider'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import ContentCut from '@mui/icons-material/ContentCut'
-import ContentCopy from '@mui/icons-material/ContentCopy'
-import ContentPaste from '@mui/icons-material/ContentPaste'
-import Cloud from '@mui/icons-material/Cloud'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Tooltip from '@mui/material/Tooltip'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
@@ -155,13 +149,24 @@ function Column({ column }) {
       <Box
         {...listeners}
         sx={{
-          minWidth: '300px',
-          maxWidth: '300px',
-          bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'),
-          ml: 2,
-          borderRadius: '6px',
+          minWidth: { xs: '280px', sm: '300px' },
+          maxWidth: { xs: '280px', sm: '300px' },
+          background: (theme) => theme.palette.mode === 'dark'
+            ? 'rgba(255, 255, 255, 0.05)'
+            : 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(10px)',
+          border: (theme) => `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
+          ml: { xs: 1, sm: 2 },
+          mr: { xs: 1, sm: 0 },
+          borderRadius: '12px',
           height: 'fit-content',
-          maxHeight: (theme) => `calc(${theme.Wms.boardContentHeight} - ${theme.spacing(5)})`
+          maxHeight: (theme) => `calc(${theme.Wms.boardContentHeight} - ${theme.spacing(5)})`,
+          boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+          transition: 'all 0.2s ease',
+          '&:hover': {
+            transform: 'none', // Remove bounce effect
+            boxShadow: '0 6px 20px rgba(0,0,0,0.12)'
+          }
         }}
       >
         {/* Box Column Header */}
@@ -245,7 +250,22 @@ function Column({ column }) {
               alignItems: 'center',
               justifyContent: 'space-between'
             }}>
-              <Button startIcon={<AddCardIcon />} onClick={toggleOpenNewCardForm}>Thêm thẻ</Button>
+              <Button startIcon={<AddCardIcon />} onClick={toggleOpenNewCardForm}
+                sx={{
+                  color: 'text.primary',
+                  justifyContent: 'flex-start',
+                  pl: 2.5,
+                  py: 1,
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  '&:hover': {
+                    backgroundColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)',
+                    transform: 'none'
+                  }
+                }}
+              >
+                Thêm thẻ
+              </Button>
               <Tooltip title="Kéo để di chuyển cột">
                 <DragHandleIcon sx={{ cursor: 'pointer' }} />
               </Tooltip>
@@ -286,12 +306,20 @@ function Column({ column }) {
                 <Button
                   className='interceptor-loading'
                   onClick={addNewCard}
-                  variant="contained" color="success" size="small"
+                  variant="contained"
+                  color="success"
+                  size="small"
                   sx={{
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    minWidth: '70px',
                     boxShadow: 'none',
                     border: '0.5px solid',
                     borderColor: (theme) => theme.palette.success.main,
-                    '&:hover': { bgcolor: (theme) => theme.palette.success.main }
+                    '&:hover': {
+                      bgcolor: (theme) => theme.palette.success.main,
+                      transform: 'none'
+                    }
                   }}
                 >
                   Thêm

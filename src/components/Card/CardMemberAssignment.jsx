@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
@@ -15,35 +15,50 @@ import { useSelector, useDispatch } from 'react-redux'
 import { selectCurrentActiveBoard, updatedCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { assignMemberToCardAPI, unassignMemberFromCardAPI } from '~/apis'
-import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
+import { selectCurrentActiveCard, updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 function CardMemberAssignment({ card }) {
   const [anchorEl, setAnchorEl] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
+  // const [isLoading, setIsLoading] = useState(false)
   const board = useSelector(selectCurrentActiveBoard)
   const currentUser = useSelector(selectCurrentUser)
+  const activeCard = useSelector(selectCurrentActiveCard)
   const dispatch = useDispatch()
+
+  // Use the most up-to-date card data (either from prop or from Redux if available)
+  const currentCard = useMemo(() => {
+    // If we're in the modal view and have active card data, use it
+    if (activeCard?._id === card._id) {
+      return activeCard
+    }
+    // Otherwise use the card prop passed to this component
+    return card
+  }, [card, activeCard])
 
   const isMenuOpen = Boolean(anchorEl)
 
   // Kiểm tra user hiện tại có phải owner không
-  const isCurrentUserOwner = board?.ownerIds?.some(ownerId => ownerId === currentUser?._id)
+  const isCurrentUserOwner = useMemo(() => {
+    return board?.ownerIds?.some(ownerId => ownerId === currentUser?._id)
+  }, [board?.ownerIds, currentUser?._id])
+  // Compute member lists
+  const { assignedMembers, availableMembers } = useMemo(() => {
+    if (!board?.FE_allUsers) {
+      return { assignedMembers: [], availableMembers: [] }
+    }
 
-  // Lấy danh sách members được assign
-  const getAssignedMembers = () => {
-    if (!card?.memberIds?.length || !board?.FE_allUsers) return []
-    return board.FE_allUsers.filter(user =>
-      card.memberIds.includes(user._id)
+    // For assigned members
+    const assigned = board.FE_allUsers.filter(user =>
+      (currentCard?.memberIds || []).includes(user._id)
     )
-  }
 
-  // Lấy danh sách members có thể assign (chưa được assign)
-  const getAvailableMembers = () => {
-    if (!board?.FE_allUsers) return []
-    return board.FE_allUsers.filter(user =>
-      !card?.memberIds?.includes(user._id)
+    // For available members
+    const available = board.FE_allUsers.filter(user =>
+      !(currentCard?.memberIds || []).includes(user._id)
     )
-  }
+
+    return { assignedMembers: assigned, availableMembers: available }
+  }, [currentCard?.memberIds, board?.FE_allUsers])
 
   const handleOpenMenu = (event) => {
     if (!isCurrentUserOwner) {
@@ -58,55 +73,85 @@ function CardMemberAssignment({ card }) {
   }
 
   const handleAssignMember = async (memberId) => {
-    if (isLoading) return
-    setIsLoading(true)
-    try {
-      const updatedCard = await assignMemberToCardAPI(card._id, memberId)
-      
-      // Debug logs để kiểm tra structure
-      console.log('API Response - Updated card:', updatedCard)
-      console.log('Current card memberIds:', card.memberIds)
-      console.log('Updated card memberIds:', updatedCard.memberIds)
+    // if (isLoading) return
+    // setIsLoading(true)
 
-      // Cập nhật card trong Redux - cả activeCard và card trong activeBoard
+    // Find the member to be assigned for UI feedback
+    const memberToAssign = board.FE_allUsers.find(user => user._id === memberId)
+
+    try {
+      // Optimistic update - update UI immediately
+      const optimisticCard = {
+        ...currentCard,
+        memberIds: [...(currentCard.memberIds || []), memberId]
+      }
+
+      // Update both active card and board card
+      dispatch(updateCurrentActiveCard(optimisticCard))
+      dispatch(updatedCardInBoard(optimisticCard))
+
+      // Show success message
+      toast.success(`Đã chỉ định ${memberToAssign?.displayName} vào thẻ`)
+
+      // Close menu
+      handleCloseMenu()
+
+      // Actual API call
+      const updatedCard = await assignMemberToCardAPI(currentCard._id, memberId)
+
+      // Update Redux with server response for consistency
       dispatch(updateCurrentActiveCard(updatedCard))
       dispatch(updatedCardInBoard(updatedCard))
-
-      const assignedMember = board.FE_allUsers.find(user => user._id === memberId)
-      toast.success(`Đã chỉ định ${assignedMember?.displayName} vào thẻ`)
-      handleCloseMenu()
     } catch (error) {
-      console.error('Error assigning member:', error)
-      toast.error(error.response?.data?.message || 'Có lỗi xảy ra khi chỉ định thành viên!')
+      // Revert optimistic update on error
+      dispatch(updateCurrentActiveCard(currentCard))
+      dispatch(updatedCardInBoard(currentCard))
+
+      // Show error message
+      toast.error('Có lỗi xảy ra khi chỉ định thành viên!')
     } finally {
-      setIsLoading(false)
+      // setIsLoading(false)
     }
   }
 
   const handleUnassignMember = async (memberId) => {
-    if (isLoading) return
-    setIsLoading(true)
+    // if (isLoading) return
+    // setIsLoading(true)
+
+    // Find the member to be unassigned for UI feedback
+    const memberToUnassign = board.FE_allUsers.find(user => user._id === memberId)
+
     try {
-      const updatedCard = await unassignMemberFromCardAPI(card._id, memberId)
-      // Debug logs
-      console.log('API Response - Updated card after unassign:', updatedCard)
-      console.log('Updated card memberIds:', updatedCard.memberIds)
-      // Cập nhật card trong Redux - cả activeCard và card trong activeBoard
+      // Optimistic update - update UI immediately
+      const optimisticCard = {
+        ...currentCard,
+        memberIds: (currentCard.memberIds || []).filter(id => id !== memberId)
+      }
+
+      // Update both active card and board card
+      dispatch(updateCurrentActiveCard(optimisticCard))
+      dispatch(updatedCardInBoard(optimisticCard))
+
+      // Show success message
+      toast.success(`Đã hủy chỉ định ${memberToUnassign?.displayName} khỏi thẻ`)
+
+      // Actual API call
+      const updatedCard = await unassignMemberFromCardAPI(currentCard._id, memberId)
+
+      // Update Redux with server response for consistency
       dispatch(updateCurrentActiveCard(updatedCard))
       dispatch(updatedCardInBoard(updatedCard))
-
-      const unassignedMember = board.FE_allUsers.find(user => user._id === memberId)
-      toast.success(`Đã hủy chỉ định ${unassignedMember?.displayName} khỏi thẻ`)
     } catch (error) {
-      console.error('Error unassigning member:', error)
-      toast.error(error.response?.data?.message || 'Có lỗi xảy ra khi hủy chỉ định thành viên!')
+      // Revert optimistic update on error
+      dispatch(updateCurrentActiveCard(currentCard))
+      dispatch(updatedCardInBoard(currentCard))
+
+      // Show error message
+      toast.error('Có lỗi xảy ra khi hủy chỉ định thành viên!')
     } finally {
-      setIsLoading(false)
+      // setIsLoading(false)
     }
   }
-
-  const assignedMembers = getAssignedMembers()
-  const availableMembers = getAvailableMembers()
 
   return (
     <Box sx={{ mb: 2 }}>
@@ -120,7 +165,7 @@ function CardMemberAssignment({ card }) {
             <IconButton
               size="small"
               onClick={handleOpenMenu}
-              disabled={isLoading}
+              // disabled={isLoading}
             >
               <PersonAddIcon fontSize="small" />
             </IconButton>
@@ -169,7 +214,7 @@ function CardMemberAssignment({ card }) {
             <MenuItem
               key={`available-${member._id}`}
               onClick={() => handleAssignMember(member._id)}
-              disabled={isLoading}
+              // disabled={isLoading}
             >
               <Avatar
                 src={member.avatar}

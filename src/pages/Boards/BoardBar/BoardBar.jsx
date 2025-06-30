@@ -22,6 +22,34 @@ const MENU_STYLES = {
 }
 
 function BoardBar({ board }) {
+  // Function to get board bar background style like Trello
+  const getBoardBarBackgroundStyle = () => {
+    if (!board) {
+      return {
+        background: 'rgba(0, 0, 0, 0.2)',
+        backdropFilter: 'blur(4px)'
+      }
+    }
+    if (board.backgroundType === 'image' && board.backgroundImage) {
+      return {
+        background: 'rgba(0, 0, 0, 0.4)',
+        backdropFilter: 'blur(4px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
+      }
+    } else if (board.backgroundType === 'color' && board.backgroundColor) {
+      return {
+        background: 'rgba(0, 0, 0, 0.2)',
+        backdropFilter: 'blur(4px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
+      }
+    }
+    // Default background
+    return {
+      background: 'rgba(0, 0, 0, 0.2)',
+      backdropFilter: 'blur(4px)'
+    }
+  }
+
   return (
     <Box sx={{
       width: '100%',
@@ -32,7 +60,7 @@ function BoardBar({ board }) {
       gap: 2,
       paddingX: 2,
       overflowX: 'auto',
-      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
+      ...getBoardBarBackgroundStyle()
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Tooltip title={board?.description}>

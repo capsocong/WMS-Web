@@ -9,7 +9,10 @@ import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import AvatarGroup from '@mui/material/AvatarGroup'
 import Box from '@mui/material/Box'
+import Chip from '@mui/material/Chip'
 import CardLabels from '~/components/Card/CardLabels'
+import { AccessTime as AccessTimeIcon } from '@mui/icons-material'
+import dayjs from 'dayjs'
 
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -37,7 +40,40 @@ function Card({ card }) {
   }
 
   const shouldShowCardActions = () => {
-    return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
+    return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length || !!card?.dueDate
+  }
+
+  const getDueDateChip = () => {
+    if (!card?.dueDate) return null
+
+    const now = dayjs()
+    const dueDate = dayjs(card.dueDate)
+    const diff = dueDate.diff(now, 'hour')
+
+    let color = 'default'
+    let text = dueDate.format('DD/MM HH:mm')
+
+    if (diff < 0) {
+      color = 'error'
+      text = `Quá hạn ${Math.abs(diff)}h`
+    } else if (diff < 24) {
+      color = 'warning'
+      text = `${diff}h còn lại`
+    }
+
+    return (
+      <Chip
+        icon={<AccessTimeIcon />}
+        label={text}
+        size="small"
+        color={color}
+        sx={{
+          fontSize: '11px',
+          height: '20px',
+          '& .MuiChip-icon': { fontSize: '12px' }
+        }}
+      />
+    )
   }
 
   const setActiveCard = () => {
@@ -47,8 +83,8 @@ function Card({ card }) {
   // Lấy thông tin members được assign
   const getAssignedMembers = () => {
     if (!card?.memberIds?.length || !board?.FE_allUsers) return []
-    
-    return board.FE_allUsers.filter(user => 
+
+    return board.FE_allUsers.filter(user =>
       card.memberIds.includes(user._id)
     ).slice(0, 3) // Chỉ hiển thị tối đa 3 avatars
   }
@@ -60,20 +96,34 @@ function Card({ card }) {
       ref={setNodeRef} style={dndKitCardStyles} {...attributes} {...listeners}
       sx={{
         cursor: 'pointer',
-        boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
         overflow: 'unset',
         display: card?.FE_PlaceholderCard ? 'none' : 'block',
         border: '1px solid transparent',
-        '&:hover': { borderColor: (theme) => theme.palette.primary.main }
-        // overflow: card?.FE_PlaceholderCard ? 'hidden' : 'unset',
-        // height: card?.FE_PlaceholderCard ? '0px' : 'unset'
+        borderRadius: '8px',
+        background: (theme) => theme.palette.mode === 'dark'
+          ? 'rgba(255, 255, 255, 0.08)'
+          : 'rgba(255, 255, 255, 0.9)',
+        backdropFilter: 'blur(8px)',
+        transition: 'all 0.2s ease',
+        '&:hover': {
+          borderColor: (theme) => theme.palette.primary.main,
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          transform: 'none' // Remove bounce effect
+        }
       }}
     >
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} /> }
       <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
         {/* Hiển thị labels */}
         <CardLabels labels={card?.labels} />
-        <Typography>{card?.title}</Typography>
+        <Typography sx={{ mb: 1 }}>{card?.title}</Typography>
+        {/* Hiển thị ngày hết hạn */}
+        {card?.dueDate && (
+          <Box sx={{ mb: 1 }}>
+            {getDueDateChip()}
+          </Box>
+        )}
       </CardContent>
       {shouldShowCardActions() &&
         <CardActions sx={{ p: '0 4px 8px 4px' }}>
