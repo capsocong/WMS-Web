@@ -210,8 +210,6 @@ function Boards() {
                 {boards.map(b =>
                   <Grid xs={2} sm={3} md={4} key={b._id}>
                     <Card sx={{ width: '250px', position: 'relative' }}>
-                      {/* Ý tưởng mở rộng về sau làm ảnh Cover cho board nhé */}
-                      {/* <CardMedia component="img" height="100" image="https://picsum.photos/100" /> */}
                       <Box sx={{
                         height: '100px',
                         position: 'relative',
