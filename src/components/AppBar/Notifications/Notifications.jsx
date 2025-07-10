@@ -70,7 +70,6 @@ function Notifications() {
     }
   }, [dispatch, currentUser._id])
 
-
   // cập nhật trạng thái của lời mời
   const updateBoardInvitation = (status, invitationId) => {
     // console.log('status: ', status)

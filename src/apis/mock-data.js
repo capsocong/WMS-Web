@@ -60,14 +60,6 @@ export const mockData = {
         _id: 'column-id-04',
         boardId: 'board-id-01',
         title: 'Empty Column 04',
-        /**
-         * Cách xử lý bug logic thư viện Dnd-kit khi Column là rỗng:
-         * Phía FE sẽ tự tạo ra một cái card đặc biệt: Placeholder Card, không liên quan tới Back-end
-         * Card đặc biệt này sẽ được ẩn ở giao diện UI người dùng.
-         * Cấu trúc Id của cái card này để Unique rất đơn giản, không cần phải làm random phức tạp:
-         * "columnId-placeholder-card" (mỗi column chỉ có thể có tối đa một cái Placeholder Card)
-         * Quan trọng khi tạo: phải đầy đủ: (_id, boardId, columnId, FE_PlaceholderCard)
-         */
         cardOrderIds: ['column-id-04-placeholder-card'],
         cards: [
           {

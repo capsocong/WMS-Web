@@ -31,11 +31,11 @@ function AutoCompleteSearchBoard() {
   const handleInputSearchChange = (event) => {
     const searchValue = event.target?.value
     if (!searchValue) return
-    console.log(searchValue)
+    // console.log(searchValue)
 
     // Dùng createSearchParams của react-router-dom để tạo một cái searchPath chuẩn với q[title] để gọi lên API
     const searchPath = `?${createSearchParams({ 'q[title]': searchValue })}`
-    console.log(searchPath)
+    // console.log(searchPath)
 
     // Gọi API...
     setLoading(true)
@@ -57,7 +57,6 @@ function AutoCompleteSearchBoard() {
     if (selectedBoard) {
       // Điều hướng tới trang board đó, với id của board được select
       navigate(`/boards/${selectedBoard._id}`)
-      
     }
   }
 
@@ -83,7 +82,6 @@ function AutoCompleteSearchBoard() {
       // Link chi tiết: https://stackoverflow.com/a/65347275/8324172
       isOptionEqualToValue={(option, value) => option._id === value._id}
 
-      // Loading thì đơn giản rồi nhé
       loading={loading}
 
       // onInputChange sẽ chạy khi gõ nội dung vào thẻ input, cần làm debounce để tránh việc bị spam gọi API

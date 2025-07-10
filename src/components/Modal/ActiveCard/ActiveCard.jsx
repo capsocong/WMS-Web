@@ -100,7 +100,6 @@ function ActiveCard() {
   const onUpdateCardLabels = (newLabels) => {
     callApiUpdateCard({ labels: newLabels })
   }
-  
   const onUploadCardCover = (event) => {
     // console.log(event.target?.files[0])
     const error = singleFileValidator(event.target?.files[0])
@@ -110,7 +109,6 @@ function ActiveCard() {
     }
     let reqData = new FormData()
     reqData.append('cardCover', event.target?.files[0])
-
     // Gọi API...
     toast.promise(
       callApiUpdateCard(reqData).finally(() => {

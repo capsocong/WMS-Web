@@ -192,14 +192,15 @@ function SidebarCreateBoardModal({ afterCreateNewBoard }) {
 
   const getCurrentBackground = () => {
     if (backgroundType === 'color') {
-      return { background: selectedColor.color }
-    } else {
-      const imageUrl = customImage || selectedImage.url
       return {
-        backgroundImage: `url(${imageUrl})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        backgroundImage: selectedColor?.color
       }
+    }
+    const imageUrl = customImage || selectedImage?.url
+    return {
+      backgroundImage: `url(${imageUrl})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center'
     }
   }
 
@@ -329,7 +330,7 @@ function SidebarCreateBoardModal({ afterCreateNewBoard }) {
                     onChange={(e, newValue) => setBackgroundType(newValue)}
                     sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}
                   >
-                    <Tab label="Màu ssắc" value="color" />
+                    <Tab label="Màu sắc" value="color" />
                     <Tab label="Hình ảnh" value="image" />
                   </Tabs>
 

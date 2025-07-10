@@ -176,7 +176,9 @@ function EditBoardModal({ board, isOpen, onClose, afterUpdateBoard }) {
 
   const getCurrentBackground = () => {
     if (backgroundType === 'color') {
-      return { background: selectedColor.color }
+      return {
+        backgroundImage: selectedColor.color
+      }
     } else {
       const imageUrl = customImage || selectedImage.url
       return {

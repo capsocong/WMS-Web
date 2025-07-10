@@ -33,11 +33,9 @@ function Column({ column }) {
   })
   const dndKitColumnStyles = {
     // touchAction: 'none', // Dành cho sensor default dạng PointerSensor
-    // Nếu sử dụng CSS.Transform như docs sẽ lỗi kiểu stretch
     // https://github.com/clauderic/dnd-kit/issues/117
     transform: CSS.Translate.toString(transform),
     transition,
-    // Chiều cao phải luôn max 100% vì nếu không sẽ lỗi lúc kéo column ngắn qua một cái column dài thì phải kéo ở khu vực giữa giữa rất khó chịu (demo ở video 32). Lưu ý lúc này phải kết hợp với {...listeners} nằm ở Box chứ không phải ở div ngoài cùng để tránh trường hợp kéo vào vùng xanh.
     height: '100%',
     opacity: isDragging ? 0.5 : undefined
   }
@@ -57,7 +55,7 @@ function Column({ column }) {
 
   const addNewCard = async () => {
     if (!newCardTitle) {
-      toast.error('Please enter Card Title!', { position: 'bottom-right' })
+      toast.error('Vui lòng nhập tiêu đề thẻ!', { position: 'bottom-left' })
       return
     }
 
@@ -67,12 +65,6 @@ function Column({ column }) {
       columnId: column._id
     }
 
-    /**
-     * Gọi lên props function createNewCard nằm ở component cha cao nhất (boards/_id.jsx)
-     * Lưu ý: Về sau ở học phần MERN Stack Advance nâng cao học trực tiếp mình sẽ với mình thì chúng ta sẽ đưa dữ liệu Board ra ngoài Redux Global Store,
-     * và lúc này chúng ta có thể gọi luôn API ở đây là xong thay vì phải lần lượt gọi ngược lên những component cha phía bên trên. (Đối với component con nằm càng sâu thì càng khổ :D)
-     * - Với việc sử dụng Redux như vậy thì code sẽ Clean chuẩn chỉnh hơn rất nhiều.
-     */
 
     // Func này có nhiệm vụ gọi API tạo mới Card và làm lại dữ liệu State Board
     const createdCard = await createNewCardAPI({
@@ -81,8 +73,6 @@ function Column({ column }) {
     })
 
     // Cập nhật state board
-    // Phía Front-end chúng ta phải tự làm đúng lại state data board (thay vì phải gọi lại api fetchBoardDetailsAPI)
-    // Lưu ý: cách làm này phụ thuộc vào tùy lựa chọn và đặc thù dự án, có nơi thì BE sẽ hỗ trợ trả về luôn toàn bộ Board dù đây có là api tạo Column hay Card đi chăng nữa. => Lúc này FE sẽ nhàn hơn.
     const newBoard = cloneDeep(board)
     const columnToUpdate = newBoard.columns.find(column => column._id === createdCard.columnId)
     if (columnToUpdate) {
@@ -143,7 +133,7 @@ function Column({ column }) {
       dispatch(updateCurrentActiveBoard(newBoard))
     } )
   }
-  // Phải bọc div ở đây vì vấn đề chiều cao của column khi kéo thả sẽ có bug kiểu kiểu flickering
+  // Phải bọc div ở đây vì vấn đề chiều cao của column khi kéo thả sẽ có bug flickering
   return (
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
@@ -227,10 +217,6 @@ function Column({ column }) {
                 <ListItemIcon><DeleteForeverIcon className="delete-forever-icon" fontSize="small" /></ListItemIcon>
                 <ListItemText>Xóa cột</ListItemText>
               </MenuItem>
-              {/* <MenuItem>
-                <ListItemIcon><Cloud fontSize="small" /></ListItemIcon>
-                <ListItemText>Lưu trữ cột</ListItemText>
-              </MenuItem> */}
             </Menu>
           </Box>
         </Box>

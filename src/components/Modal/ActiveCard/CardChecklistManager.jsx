@@ -6,7 +6,6 @@ import {
   Menu,
   TextField,
   Checkbox,
-  FormControlLabel,
   IconButton,
   LinearProgress,
   Divider
@@ -201,7 +200,7 @@ function CardChecklistManager({ card, onUpdateChecklist }) {
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
         PaperProps={{
-          sx: { 
+          sx: {
             width: 400,
             maxHeight: 600,
             borderRadius: '12px',
