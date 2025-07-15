@@ -58,7 +58,7 @@ const BOARD_BACKGROUND_COLORS = [
   { name: 'Dark Blue', color: 'linear-gradient(135deg, #026aa7 0%, #01517a 100%)' }
 ]
 
-// Predefined background images (Trello-like)
+// Predefined background images
 const BOARD_BACKGROUND_IMAGES = [
   { name: 'Mountain Landscape', url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop&crop=entropy&auto=format' },
   { name: 'Ocean Waves', url: 'https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1920&h=1080&fit=crop&crop=entropy&auto=format' },
